@@ -1,8 +1,11 @@
 ## Put comments here that give an overall description of what your
 ## functions do
 
-## Write a short comment describing this function
-
+## This function creates the matrix object for this assignment
+## Usage is B = matrix(rnorm(9),nrow=3,ncol=3)
+## qq <- makeCacheMatrix()
+## qq$set(matrix(rnorm(9),nrow=3,ncol=3))
+##
 makeCacheMatrix <- function(x = matrix()) {
   m <- NULL
   set <- function(y) {
@@ -10,25 +13,27 @@ makeCacheMatrix <- function(x = matrix()) {
     m <<- NULL
   }
   get <- function() x
-  setmean <- function(mean) m <<- mean
-  getmean <- function() m
+  setinverse <- function(solve) m <<- solve
+  getinverse <- function() m
   list(set = set, get = get,
-       setmean = setmean,
-       getmean = getmean)
+       setinverse = setinverse,
+       getinverse = getinverse)
 }
 
 
-## Write a short comment describing this function
+## This function returns the Inverse of the matrix on the first run and stores it in a cache
+## On subsequent runs it will return a cache of the inverse of the matrix
+## Usage is cacheSolve(B)
 
 cacheSolve <- function(x, ...) {
   ## Return a matrix that is the inverse of 'x'
-  m <- x$getmean()
+  m <- x$getinverse()
   if(!is.null(m)) {
     message("getting cached data")
     return(m)
   }
   data <- x$get()
-  m <- mean(data, ...)
-  x$setmean(m)
+  m <- solve(data, ...)
+  x$setinverse(m)
   m
 }
